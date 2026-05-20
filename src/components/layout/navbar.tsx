@@ -45,7 +45,7 @@ export function Navbar() {
           className={cn(
             "flex items-center justify-between rounded-2xl px-4 py-3 transition-all duration-500 md:px-6",
             isScrolled
-              ? "glass-strong shadow-2xl shadow-black/20"
+              ? "bg-white/[0.04] backdrop-blur-lg shadow-lg"
               : "bg-transparent"
           )}
         >
@@ -67,7 +67,7 @@ export function Navbar() {
                   {isActive && (
                     <motion.span
                       layoutId="activeTab"
-                      className="absolute inset-0 rounded-lg bg-white/[0.07]"
+                      className="absolute inset-0 rounded-lg bg-white/[0.17]"
                       transition={{
                         type: "spring",
                         stiffness: 380,
