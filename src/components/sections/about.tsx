@@ -2,111 +2,105 @@
 
 import { motion } from "framer-motion";
 import { aboutMetrics } from "@/data/portfolio";
-import { SectionHeading } from "@/components/shared/section-heading";
-import { Reveal, StaggerContainer, StaggerItem } from "@/components/shared/animated-text";
-
-function MetricCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="group relative overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.02] p-6 transition-all duration-300 hover:border-white/[0.1] hover:bg-white/[0.04]">
-      <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{
-          background: "radial-gradient(circle at center, rgba(59,130,246,0.05), transparent 70%)",
-        }}
-      />
-      <p className="relative text-3xl font-bold text-white md:text-4xl">{value}</p>
-      <p className="relative mt-1 text-sm text-white/40">{label}</p>
-    </div>
-  );
-}
+import { Reveal } from "@/components/shared/animated-text";
 
 export function About() {
   return (
-    <section id="about" className="relative py-32 md:py-40">
-      <div className="mx-auto max-w-7xl px-6">
-        <SectionHeading
-          label="About"
-          title="Crafting AI Systems That Scale"
-          description="I build production-grade AI applications — from intelligent retrieval pipelines to beautiful, performant interfaces."
-        />
+    <section
+      id="about"
+      className="relative flex min-h-screen items-center py-24 md:py-32"
+    >
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.01] to-transparent" />
 
-        <div className="grid gap-16 lg:grid-cols-2 lg:gap-20">
-          <Reveal>
-            <div className="relative">
-              <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-blue-500/10 via-transparent to-violet-500/10 blur-2xl" />
-              <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0a0a0a]">
-                <div className="aspect-[4/3] bg-gradient-to-br from-blue-500/5 via-transparent to-violet-500/5 p-8 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-2xl bg-white/[0.05] text-4xl font-bold text-white/80">
-                      NW
-                    </div>
-                    <p className="mt-4 text-sm text-white/30">Nikhil Wakode</p>
-                    <p className="text-xs text-white/20">AI + Full Stack Engineer</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Reveal>
+      <div className="relative mx-auto max-w-5xl px-6 w-full">
+        <Reveal>
+          <span className="mb-6 inline-block font-mono text-xs uppercase tracking-[0.3em] text-white/20">
+            About
+          </span>
+        </Reveal>
 
-          <div className="flex flex-col justify-center">
-            <Reveal delay={0.1}>
-              <div className="space-y-6 text-white/50 leading-relaxed">
+        <div className="grid gap-16 lg:grid-cols-[2fr_1fr]">
+          <div>
+            <Reveal>
+              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl leading-[1.15]">
+                I build AI applications
+                <br />
+                <span className="text-white/30">end to end.</span>
+              </h2>
+            </Reveal>
+
+            <Reveal delay={0.2}>
+              <div className="mt-8 space-y-5 text-[15px] leading-[1.8] text-white/40 max-w-2xl">
                 <p>
-                  I&apos;m a full-stack engineer with deep expertise in building AI-powered
-                  applications. My focus is on designing production-grade RAG systems,
-                  hybrid retrieval pipelines, and scalable backend architectures that serve
-                  real users at scale.
+                  I&apos;m a CS undergrad at IIIT Kottayam with a focus on building
+                  full-stack AI systems. Most of my recent work involves RAG pipelines —
+                  hybrid retrieval with BM25 + vector search, cross-encoder reranking,
+                  and streaming LLM responses.
                 </p>
                 <p>
-                  From vector search optimization to streaming LLM responses, I work across
-                  the entire stack — combining robust backend systems with meticulously crafted
-                  frontend experiences. Every system I build is designed for reliability,
-                  performance, and maintainability.
-                </p>
-                <p>
-                  I believe the best AI products are invisible — they feel effortless to use,
-                  but are backed by sophisticated engineering underneath.
+                  I like working across the stack: Python/FastAPI for backends,
+                  Next.js/TypeScript for frontends, Qdrant for vector storage,
+                  and Docker for deployment. I care about things actually working
+                  in production, not just in demos.
                 </p>
               </div>
             </Reveal>
-
-            <StaggerContainer className="mt-10 grid grid-cols-2 gap-4" delay={0.3}>
-              {aboutMetrics.map((metric) => (
-                <StaggerItem key={metric.label}>
-                  <MetricCard {...metric} />
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
           </div>
+
+          <Reveal delay={0.3}>
+            <div className="flex flex-col gap-6 lg:pt-4">
+              {aboutMetrics.map((metric, i) => (
+                <motion.div
+                  key={metric.label}
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.4 + i * 0.1, duration: 0.5 }}
+                  className="border-l-2 border-white/[0.06] pl-6 transition-colors hover:border-blue-500/30"
+                >
+                  <p className="text-xl font-bold tracking-tight text-white">
+                    {metric.value}
+                  </p>
+                  <p className="mt-1 text-xs uppercase tracking-wider text-white/25">
+                    {metric.label}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </Reveal>
         </div>
 
         <Reveal delay={0.4}>
-          <div className="mt-20 grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-white/[0.06] md:grid-cols-3">
             {[
               {
-                title: "AI Systems",
-                desc: "Production RAG pipelines, hybrid search, reranking, and streaming LLM integrations.",
+                title: "AI / RAG Systems",
+                desc: "Hybrid retrieval pipelines, vector search with Qdrant, BM25 + reranking, streaming LLM integration.",
               },
               {
-                title: "Scalable Architecture",
-                desc: "Event-driven backends, microservices, real-time processing, and containerized deployments.",
+                title: "Full-Stack Development",
+                desc: "FastAPI + Next.js apps with JWT auth, WebSocket streaming, Docker deployment, CI/CD.",
               },
               {
-                title: "Frontend Craft",
-                desc: "Pixel-perfect interfaces, smooth animations, accessible design, and optimized performance.",
+                title: "Frontend",
+                desc: "React, TypeScript, Tailwind, Framer Motion. Clean interfaces that make complex systems usable.",
               },
-            ].map((card) => (
+            ].map((card, i) => (
               <motion.div
                 key={card.title}
-                whileHover={{ y: -4 }}
-                className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 transition-colors hover:border-white/[0.1]"
+                whileHover={{ backgroundColor: "rgba(255,255,255,0.02)" }}
+                className="relative p-8 transition-colors"
               >
-                <div className="absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100"
-                  style={{
-                    background: "radial-gradient(circle at 50% 0%, rgba(59,130,246,0.06), transparent 70%)",
-                  }}
-                />
-                <h3 className="relative text-lg font-semibold text-white">{card.title}</h3>
-                <p className="relative mt-2 text-sm leading-relaxed text-white/40">
+                {i < 2 && (
+                  <div className="absolute right-0 top-8 bottom-8 hidden w-px bg-white/[0.06] md:block" />
+                )}
+                <span className="mb-3 block font-mono text-[10px] uppercase tracking-[0.2em] text-blue-400/40">
+                  0{i + 1}
+                </span>
+                <h3 className="text-base font-semibold text-white">
+                  {card.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/35">
                   {card.desc}
                 </p>
               </motion.div>

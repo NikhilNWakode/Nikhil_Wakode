@@ -90,7 +90,7 @@ export function Navbar() {
 
           <div className="hidden items-center gap-2 md:flex">
             <a
-              href={`https://github.com/nikhilwakode`}
+              href={socialLinks.github}
               target="_blank"
               rel="noopener noreferrer"
               className="flex h-9 w-9 items-center justify-center rounded-lg text-white/40 transition-colors hover:bg-white/[0.07] hover:text-white"

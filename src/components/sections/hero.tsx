@@ -1,74 +1,145 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowDown, ArrowRight, Mail } from "lucide-react";
 import { MagneticButton } from "@/components/shared/magnetic-button";
 import { AuroraBackground } from "@/components/effects/aurora-background";
 
-const terminalLines = [
-  { text: "$ initializing ai-pipeline...", delay: 0.8 },
-  { text: "→ loading embeddings model [all-MiniLM-L6-v2]", delay: 1.4 },
-  { text: "→ connecting to Qdrant vector store", delay: 2.0 },
-  { text: "✓ vector db connected [128 collections]", delay: 2.6 },
-  { text: "→ building retrieval chain...", delay: 3.2 },
-  { text: "→ hybrid search: dense + sparse + reranker", delay: 3.8 },
-  { text: "✓ RAG pipeline ready [latency: 230ms]", delay: 4.4 },
-  { text: "→ websocket server listening on :8080", delay: 5.0 },
-  { text: "✓ streaming response enabled", delay: 5.4 },
-  { text: "→ deploying to production...", delay: 5.8 },
-  { text: "✓ deployment successful ✨", delay: 6.4 },
+const terminalPhases = [
+  [
+    { text: "$ python -m medisearch.pipeline --start", type: "cmd" },
+    { text: "", type: "blank" },
+    { text: "⟩ Loading BGE embedding model...", type: "info" },
+    { text: "⟩ Connecting to Qdrant vector store...", type: "info" },
+    { text: "✓ Vector DB connected", type: "success" },
+    { text: "✓ Hybrid retrieval ready: BM25 + dense + reranker", type: "success" },
+    { text: "", type: "blank" },
+    { text: "⟩ Starting FastAPI server on :8000...", type: "info" },
+    { text: "✓ WebSocket streaming enabled", type: "success" },
+    { text: "✓ Pipeline ready", type: "success" },
+  ],
+  [
+    { text: "", type: "blank" },
+    { text: "$ query --input=\"treatment options for arrhythmia\"", type: "cmd" },
+    { text: "", type: "blank" },
+    { text: "⟩ Embedding query → 768-dim vector", type: "info" },
+    { text: "⟩ Dense retrieval: 20 candidates", type: "info" },
+    { text: "⟩ Sparse retrieval (BM25): 15 candidates", type: "info" },
+    { text: "⟩ RRF fusion + cross-encoder reranking", type: "info" },
+    { text: "✓ Top-5 passages selected", type: "success" },
+    { text: "", type: "blank" },
+    { text: "⟩ Streaming response from Llama 3...", type: "info" },
+    { text: "█ Generating...", type: "stream" },
+    { text: "✓ Response complete — 3 citations attached", type: "success" },
+  ],
+  [
+    { text: "", type: "blank" },
+    { text: "$ docker compose up --build", type: "cmd" },
+    { text: "", type: "blank" },
+    { text: "⟩ Building containers...", type: "info" },
+    { text: "⟩ Running health checks...", type: "info" },
+    { text: "✓ All services healthy", type: "success" },
+    { text: "✓ Deployed successfully", type: "success" },
+  ],
 ];
 
-function TerminalCard() {
+function InteractiveTerminal() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [lines, setLines] = useState<{ text: string; type: string }[]>([]);
+  const [phaseIndex, setPhaseIndex] = useState(0);
+  const [lineIndex, setLineIndex] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (scrollRef.current) {
-        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    const phase = terminalPhases[phaseIndex];
+    if (!phase || lineIndex >= phase.length) {
+      if (phaseIndex < terminalPhases.length - 1) {
+        const timeout = setTimeout(() => {
+          setPhaseIndex((p) => p + 1);
+          setLineIndex(0);
+        }, 1500);
+        return () => clearTimeout(timeout);
       }
-    }, 500);
-    return () => clearInterval(timer);
-  }, []);
+      const timeout = setTimeout(() => {
+        setLines([]);
+        setPhaseIndex(0);
+        setLineIndex(0);
+      }, 4000);
+      return () => clearTimeout(timeout);
+    }
+
+    const delay =
+      phase[lineIndex].type === "cmd"
+        ? 600
+        : phase[lineIndex].type === "blank"
+          ? 100
+          : 200;
+    const timeout = setTimeout(() => {
+      setLines((prev) => [...prev, phase[lineIndex]]);
+      setLineIndex((l) => l + 1);
+    }, delay);
+
+    return () => clearTimeout(timeout);
+  }, [phaseIndex, lineIndex]);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [lines]);
+
+  const colorMap: Record<string, string> = {
+    cmd: "text-blue-400",
+    info: "text-white/40",
+    success: "text-emerald-400/90",
+    stream: "text-amber-400/80",
+    blank: "text-transparent",
+  };
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: 40, rotateY: -8 }}
-      animate={{ opacity: 1, x: 0, rotateY: 0 }}
-      transition={{ duration: 1, delay: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-      className="relative w-full max-w-lg"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1, delay: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+      className="relative w-full max-w-xl"
     >
-      <div className="absolute -inset-1 rounded-2xl bg-gradient-to-b from-blue-500/20 to-transparent opacity-50 blur-xl" />
-      <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0a0a0a]">
+      <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-blue-500/30 via-blue-500/5 to-transparent" />
+      <div className="absolute -inset-8 rounded-3xl bg-blue-500/[0.04] blur-3xl" />
+
+      <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#050508]">
         <div className="flex items-center gap-2 border-b border-white/[0.06] px-4 py-3">
-          <div className="h-3 w-3 rounded-full bg-white/10" />
-          <div className="h-3 w-3 rounded-full bg-white/10" />
-          <div className="h-3 w-3 rounded-full bg-white/10" />
-          <span className="ml-2 font-mono text-xs text-white/30">ai-pipeline — zsh</span>
+          <div className="flex gap-1.5">
+            <div className="h-2.5 w-2.5 rounded-full bg-white/[0.08]" />
+            <div className="h-2.5 w-2.5 rounded-full bg-white/[0.08]" />
+            <div className="h-2.5 w-2.5 rounded-full bg-white/[0.08]" />
+          </div>
+          <div className="ml-3 flex items-center gap-2">
+            <div className="h-1 w-1 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="font-mono text-[10px] text-white/25">
+              rag-pipeline — zsh
+            </span>
+          </div>
         </div>
-        <div ref={scrollRef} className="h-[320px] overflow-y-auto p-4 md:h-[360px]">
-          {terminalLines.map((line, i) => (
+
+        <div
+          ref={scrollRef}
+          className="h-[280px] overflow-y-auto p-4 md:h-[320px] scrollbar-none"
+        >
+          {lines.map((line, i) => (
             <motion.div
-              key={i}
-              initial={{ opacity: 0, x: -10 }}
+              key={`${phaseIndex}-${i}`}
+              initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: line.delay, duration: 0.4 }}
-              className={`font-mono text-xs leading-relaxed md:text-sm ${
-                line.text.startsWith("✓")
-                  ? "text-emerald-400/80"
-                  : line.text.startsWith("$")
-                    ? "text-blue-400/80"
-                    : "text-white/40"
-              }`}
+              transition={{ duration: 0.2 }}
+              className={`font-mono text-[11px] leading-[1.8] md:text-xs ${colorMap[line.type] || "text-white/40"}`}
             >
-              {line.text}
+              {line.text || " "}
             </motion.div>
           ))}
           <motion.span
             animate={{ opacity: [1, 0] }}
-            transition={{ duration: 0.8, repeat: Infinity }}
-            className="mt-2 inline-block h-4 w-2 bg-blue-400/60"
+            transition={{ duration: 0.6, repeat: Infinity }}
+            className="inline-block h-3.5 w-1.5 bg-blue-400/50 mt-1"
           />
         </div>
       </div>
@@ -76,14 +147,47 @@ function TerminalCard() {
   );
 }
 
+function CursorSpotlight() {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const smoothX = useSpring(mouseX, { stiffness: 50, damping: 20 });
+  const smoothY = useSpring(mouseY, { stiffness: 50, damping: 20 });
+
+  useEffect(() => {
+    function handleMouseMove(e: MouseEvent) {
+      const hero = document.getElementById("home");
+      if (!hero) return;
+      const rect = hero.getBoundingClientRect();
+      mouseX.set(e.clientX - rect.left);
+      mouseY.set(e.clientY - rect.top);
+    }
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
+  const background = useTransform(
+    [smoothX, smoothY],
+    ([x, y]) =>
+      `radial-gradient(800px circle at ${x}px ${y}px, rgba(59,130,246,0.04), transparent 40%)`
+  );
+
+  return (
+    <motion.div
+      className="pointer-events-none absolute inset-0"
+      style={{ background }}
+    />
+  );
+}
+
 export function Hero() {
   return (
     <section
       id="home"
-      className="relative flex min-h-screen items-center overflow-hidden pt-20"
+      className="relative flex h-screen min-h-[600px] max-h-[1000px] items-center overflow-hidden"
     >
       <AuroraBackground />
       <div className="absolute inset-0 grid-pattern" />
+      <CursorSpotlight />
 
       <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center gap-12 px-6 lg:flex-row lg:gap-16">
         <div className="flex-1 text-center lg:text-left">
@@ -91,43 +195,44 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-1.5"
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.02] px-4 py-1.5"
           >
-            <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-            <span className="text-xs font-medium text-white/50">
-              Available for opportunities
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+            <span className="text-[11px] font-medium tracking-wide text-white/40">
+              Open to opportunities
             </span>
           </motion.div>
 
           <motion.h1
-            className="text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
-            initial={{ opacity: 0, y: 30 }}
+            className="text-4xl font-bold leading-[1.1] tracking-[-0.02em] text-white sm:text-5xl md:text-6xl lg:text-7xl"
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{
+              duration: 1,
+              delay: 0.3,
+              ease: [0.25, 0.1, 0.25, 1],
+            }}
           >
-            Building{" "}
-            <span className="text-gradient-blue">Intelligent Systems</span>
-            <br />
-            with Exceptional{" "}
-            <span className="text-gradient">Interfaces.</span>
+            Hi, I&apos;m{" "}
+            <span className="text-gradient-blue">Nikhil</span>
           </motion.h1>
 
           <motion.p
-            className="mt-6 max-w-xl text-base text-white/40 md:text-lg lg:mx-0 mx-auto"
+            className="mt-6 max-w-lg text-[15px] leading-relaxed text-white/35 lg:mx-0 mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
           >
-            AI Engineer + Full Stack Developer specializing in RAG systems,
-            AI applications, scalable backend systems, and modern frontend
-            experiences.
+            Full-stack developer building AI-powered applications — RAG
+            pipelines, hybrid retrieval systems, and the interfaces around them.
+            Currently finishing my B.Tech at IIIT Kottayam.
           </motion.p>
 
           <motion.div
-            className="mt-10 flex flex-wrap items-center justify-center gap-4 lg:justify-start"
+            className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.7 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
           >
             <MagneticButton
               href="#projects"
@@ -138,7 +243,7 @@ export function Hero() {
             </MagneticButton>
             <MagneticButton
               href="#contact"
-              className="border border-white/[0.12] bg-white/[0.03] text-white hover:bg-white/[0.08]"
+              className="border border-white/[0.1] bg-white/[0.03] text-white/80 hover:bg-white/[0.06]"
             >
               <Mail className="h-4 w-4" />
               Contact Me
@@ -147,7 +252,7 @@ export function Hero() {
         </div>
 
         <div className="flex-1 hidden lg:flex justify-end">
-          <TerminalCard />
+          <InteractiveTerminal />
         </div>
       </div>
 
@@ -155,15 +260,13 @@ export function Hero() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
+        transition={{ delay: 2 }}
       >
         <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="flex flex-col items-center gap-2"
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
         >
-          <span className="text-xs text-white/20">Scroll</span>
-          <ArrowDown className="h-4 w-4 text-white/20" />
+          <ArrowDown className="h-4 w-4 text-white/15" />
         </motion.div>
       </motion.div>
     </section>

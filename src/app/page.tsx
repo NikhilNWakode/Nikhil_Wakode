@@ -8,9 +8,9 @@ import { About } from "@/components/sections/about";
 import { Projects } from "@/components/sections/projects";
 import { Experience } from "@/components/sections/experience";
 import { Skills } from "@/components/sections/skills";
-import { Process } from "@/components/sections/process";
 import { Contact } from "@/components/sections/contact";
 import { Footer } from "@/components/layout/footer";
+import { AiChat } from "@/components/shared/ai-chat";
 
 export default function Home() {
   return (
@@ -23,10 +23,10 @@ export default function Home() {
         <Projects />
         <Experience />
         <Skills />
-        <Process />
         <Contact />
       </main>
       <Footer />
+      <AiChat />
     </Providers>
   );
 }
