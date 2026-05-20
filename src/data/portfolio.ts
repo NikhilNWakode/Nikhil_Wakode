@@ -307,6 +307,6 @@ export const navLinks = [
 
 export const socialLinks = {
   github: "https://github.com/NikhilNWakode",
-  linkedin: "https://linkedin.com/in/nikhilwakode",
+  linkedin: "https://www.linkedin.com/in/wakode-nikhil/",
   email: "wakode333nikhil@gmail.com",
 };

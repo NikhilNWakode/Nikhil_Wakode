@@ -10,9 +10,9 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="relative flex min-h-[70vh] items-center py-24 md:py-32"
+      className="relative flex min-h-[50vh] sm:min-h-[70vh] items-center py-16 sm:py-24 md:py-32"
     >
-      <div className="relative mx-auto max-w-3xl px-6 text-center w-full">
+      <div className="relative mx-auto max-w-3xl px-4 sm:px-6 text-center w-full">
         <Reveal>
           <span className="mb-6 inline-block font-mono text-xs uppercase tracking-[0.3em] text-white/15">
             Contact
@@ -20,7 +20,7 @@ export function Contact() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl leading-[1.1]">
+          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl leading-[1.1]">
             Let&apos;s connect.
           </h2>
         </Reveal>

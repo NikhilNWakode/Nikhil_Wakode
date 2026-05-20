@@ -13,9 +13,9 @@ export function Experience() {
   return (
     <section
       id="experience"
-      className="relative flex min-h-screen items-center py-24 md:py-32"
+      className="relative flex items-center py-16 sm:py-24 md:py-32 md:min-h-screen"
     >
-      <div className="relative mx-auto max-w-5xl px-6 w-full" ref={ref}>
+      <div className="relative mx-auto max-w-5xl px-4 sm:px-6 w-full" ref={ref}>
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}

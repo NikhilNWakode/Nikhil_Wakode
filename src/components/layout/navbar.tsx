@@ -38,7 +38,7 @@ export function Navbar() {
         transition={{ duration: 0.8, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
         className={cn(
           "fixed top-4 left-1/2 z-50 -translate-x-1/2 transition-all duration-500",
-          isScrolled ? "w-[min(90%,800px)]" : "w-[min(90%,900px)]"
+          isScrolled ? "w-[min(92%,800px)]" : "w-[min(92%,900px)]"
         )}
       >
         <nav
@@ -106,7 +106,7 @@ export function Navbar() {
               <LinkedinIcon className="h-4 w-4" />
             </a>
             <a
-              href="/resume.pdf"
+              href="https://drive.google.com/file/d/1yNF7WoCrB7Ld6BdIcfN2s4K-7GksgPiA/view?usp=drivesdk"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 rounded-lg bg-white/[0.07] px-4 py-2 text-sm font-medium text-white transition-all hover:bg-white/[0.12]"

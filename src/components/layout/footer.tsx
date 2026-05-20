@@ -9,7 +9,7 @@ export function Footer() {
   return (
     <footer className="relative border-t border-white/[0.06] bg-black">
       <div className="absolute inset-0 grid-pattern opacity-30" />
-      <div className="relative mx-auto max-w-7xl px-6 py-16">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-10 sm:py-16">
         <Reveal>
           <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
             <div className="flex items-center gap-3">

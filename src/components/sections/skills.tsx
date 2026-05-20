@@ -34,8 +34,8 @@ export function Skills() {
   const active = skillCategories.find((c) => c.name === activeCategory)!;
 
   return (
-    <section id="skills" className="relative flex min-h-screen items-center py-24 md:py-32">
-      <div className="relative mx-auto max-w-5xl px-6 w-full">
+    <section id="skills" className="relative flex items-center py-16 sm:py-24 md:py-32 md:min-h-screen">
+      <div className="relative mx-auto max-w-5xl px-4 sm:px-6 w-full">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -52,7 +52,7 @@ export function Skills() {
           </h2>
         </motion.div>
 
-        <div className="grid gap-8 lg:grid-cols-[280px_1fr] lg:gap-12">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-[280px_1fr] lg:gap-12">
           <Reveal>
             <div className="flex flex-wrap gap-2 lg:flex-col lg:gap-1">
               {skillCategories.map((category) => {
@@ -87,7 +87,7 @@ export function Skills() {
           </Reveal>
 
           <Reveal delay={0.2}>
-            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 md:p-10">
+            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 sm:p-8 md:p-10">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeCategory}

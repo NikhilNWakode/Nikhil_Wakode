@@ -8,18 +8,18 @@ export function About() {
   return (
     <section
       id="about"
-      className="relative flex min-h-screen items-center py-24 md:py-32"
+      className="relative flex items-center py-16 sm:py-24 md:py-32 md:min-h-screen"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.01] to-transparent" />
 
-      <div className="relative mx-auto max-w-5xl px-6 w-full">
+      <div className="relative mx-auto max-w-5xl px-4 sm:px-6 w-full">
         <Reveal>
           <span className="mb-6 inline-block font-mono text-xs uppercase tracking-[0.3em] text-white/20">
             About
           </span>
         </Reveal>
 
-        <div className="grid gap-16 lg:grid-cols-[2fr_1fr]">
+        <div className="grid gap-10 sm:gap-16 lg:grid-cols-[2fr_1fr]">
           <div>
             <Reveal>
               <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl leading-[1.15]">
@@ -71,7 +71,7 @@ export function About() {
         </div>
 
         <Reveal delay={0.4}>
-          <div className="mt-16 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-white/[0.06] md:grid-cols-3">
+          <div className="mt-10 sm:mt-16 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-white/[0.06] md:grid-cols-3">
             {[
               {
                 title: "AI / RAG Systems",
@@ -89,7 +89,7 @@ export function About() {
               <motion.div
                 key={card.title}
                 whileHover={{ backgroundColor: "rgba(255,255,255,0.02)" }}
-                className="relative p-8 transition-colors"
+                className="relative p-5 sm:p-8 transition-colors"
               >
                 {i < 2 && (
                   <div className="absolute right-0 top-8 bottom-8 hidden w-px bg-white/[0.06] md:block" />

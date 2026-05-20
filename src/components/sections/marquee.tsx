@@ -16,7 +16,7 @@ function MarqueeRow({ reverse = false }: { reverse?: boolean }) {
         {items.map((tech, i) => (
           <div
             key={`${tech}-${i}`}
-            className="group relative flex shrink-0 items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-6 py-3 transition-all duration-300 hover:border-blue-500/20 hover:bg-blue-500/[0.04]"
+            className="group relative flex shrink-0 items-center gap-2 sm:gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-2 sm:px-6 sm:py-3 transition-all duration-300 hover:border-blue-500/20 hover:bg-blue-500/[0.04]"
           >
             <div className="absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
               style={{
@@ -35,7 +35,7 @@ function MarqueeRow({ reverse = false }: { reverse?: boolean }) {
 
 export function Marquee() {
   return (
-    <section className="relative overflow-hidden border-y border-white/[0.04] py-12">
+    <section className="relative overflow-hidden border-y border-white/[0.04] py-8 sm:py-12">
       <div className="absolute inset-0 radial-gradient opacity-50" />
       <div className="relative flex flex-col gap-4">
         <MarqueeRow />

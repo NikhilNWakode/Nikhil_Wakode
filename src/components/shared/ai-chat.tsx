@@ -71,7 +71,7 @@ export function AiChat() {
     <>
       <motion.button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-white/[0.08] bg-[#0a0a0a] text-white/50 shadow-2xl shadow-black/40 transition-all hover:border-blue-500/20 hover:text-blue-400"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl border border-white/[0.08] bg-[#0a0a0a] text-white/50 shadow-2xl shadow-black/40 transition-all hover:border-blue-500/20 hover:text-blue-400"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         initial={{ opacity: 0, y: 20 }}
@@ -88,7 +88,7 @@ export function AiChat() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-20 right-6 z-50 w-[min(360px,calc(100vw-48px))] overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0a0a0a] shadow-2xl shadow-black/60"
+            className="fixed bottom-16 right-4 sm:bottom-20 sm:right-6 z-50 w-[min(360px,calc(100vw-32px))] sm:w-[min(360px,calc(100vw-48px))] overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0a0a0a] shadow-2xl shadow-black/60"
           >
             <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3">
               <div className="flex items-center gap-2.5">
